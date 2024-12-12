@@ -5,21 +5,21 @@ public class Main {
         Kategori kat1 = new Kategori("Novel", "Koleksi buku novel");
         Kategori kat2 = new Kategori("Referensi", "Buku referensi ilmiah");
         Kategori kat3 = new Kategori("Komik", "Komik anak-anak");
-// test insert
+
         kat1.save();
         kat2.save();
         kat3.save();
-// test update
+
         kat2.setKeterangan("Koleksi buku referensi ilmiah");
         kat2.save();
-// test delete
+
         kat3.delete();
-// test select all
+
         for(Kategori k : new Kategori().getAll())
         {
             System.out.println("Nama: " + k.getNama() + ", Ket: " + k.getKeterangan());
         }
-// test search
+
         for(Kategori k : new Kategori().search("ilmiah"))
         {
             System.out.println("Nama: " + k.getNama() + ", Ket: " + k.getKeterangan());
@@ -43,6 +43,31 @@ public class Main {
         {
             System.out.println("Judul: " + b.getJudul() + ", Kategori: " + b.getKategori().getNama());
         }
+
+        Anggota anggota1 = new Anggota("agus iqbal", "jl. simpang", "123456789");
+        Anggota anggota2 = new Anggota("saputro", "jl. nanas", "123456789");
+
+        anggota1.save();
+        anggota2.save();
+
+        for(Anggota a : new Anggota().getAll())
+            System.out.println(a.getNama() + ", " + a.getAlamat() + ", " + a.getTelepon());
+
+        anggota1.setNama("budiman");
+        anggota1.save();
+
+        for(Anggota a : new Anggota().getAll())
+            System.out.println(a.getNama() + ", " + a.getAlamat() + ", " + a.getTelepon());
+
+
+        Peminjaman peminjaman = new Peminjaman(anggota1.getIdanggota(), buku3.getIdBuku(), "2024-12-12", "2024-12-15");
+        peminjaman.save();
+
+        for (Peminjaman p : new Peminjaman().getAll())
+            System.out.println(p.getIdanggota() + ", " + p.getIdbuku() + ", " + p.getTanggalpinjam() + ", " + p.getTanggalkembali());
+
+        for (Peminjaman p : new Peminjaman().search("dor"))
+            System.out.println(p.getIdanggota() + ", " + p.getIdbuku() + ", " + p.getTanggalpinjam() + ", " + p.getTanggalkembali());
     }
 
 }

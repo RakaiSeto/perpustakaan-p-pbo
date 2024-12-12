@@ -129,7 +129,7 @@ public class Anggota {
         } else {
             String SQL = "UPDATE anggota SET "
                     + "nama = '" + this.nama + "', "
-                    + "alamat = '" + this.alamat + "' "
+                    + "alamat = '" + this.alamat + "', "
                     + "telepon = '" + this.telepon + "' "
                     + "WHERE idanggota = '" + this.idanggota + "'";
             DBHelper.executeQuery(SQL);

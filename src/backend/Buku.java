@@ -92,7 +92,7 @@ public class Buku {
 }
 
 public ArrayList<Buku> getAll() {
-    ArrayList<Buku> ListBuku = new ArrayList<>();
+    ArrayList<Buku> ListBuku = new ArrayList();
 
     ResultSet rs = DBHelper.selectQuery("SELECT " +
                                         " b.idbuku AS idbuku, " +

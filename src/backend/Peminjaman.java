@@ -5,8 +5,9 @@ import java.util.ArrayList;
 
 public class Peminjaman {
     private int idpeminjaman;
-    private int idanggota;
-    private int idbuku;
+    private Anggota anggota = new Anggota();
+    private Pegawai pegawai = new Pegawai();
+    private Buku buku = new Buku();
     private String tanggalpinjam;
     private String tanggalkembali;
 
@@ -15,9 +16,10 @@ public class Peminjaman {
 
     }
 
-    public Peminjaman(int idanggota, int idbuku, String tanggalpinjam, String tanggalkembali) {
-        this.idanggota = idanggota;
-        this.idbuku = idbuku;
+    public Peminjaman(Anggota anggota, Pegawai pegawai, Buku buku, String tanggalpinjam, String tanggalkembali) {
+        this.anggota = anggota;
+        this.pegawai = pegawai;
+        this.buku = buku;
         this.tanggalpinjam = tanggalpinjam;
         this.tanggalkembali = tanggalkembali;
     }
@@ -30,20 +32,28 @@ public class Peminjaman {
         this.idpeminjaman = idpeminjaman;
     }
 
-    public int getIdanggota() {
-        return idanggota;
+    public Anggota getAnggota() {
+        return anggota;
     }
 
-    public void setIdanggota(int idanggota) {
-        this.idanggota = idanggota;
+    public void setAnggota(Anggota anggota) {
+        this.anggota = anggota;
     }
 
-    public int getIdbuku() {
-        return idbuku;
+    public Pegawai getPegawai() {
+        return pegawai;
     }
 
-    public void setIdbuku(int idbuku) {
-        this.idbuku = idbuku;
+    public void setPegawai(Pegawai pegawai) {
+        this.pegawai = pegawai;
+    }
+
+    public Buku getBuku() {
+        return buku;
+    }
+
+    public void setBuku(Buku buku) {
+        this.buku = buku;
     }
 
     public String getTanggalpinjam() {
@@ -70,8 +80,9 @@ public class Peminjaman {
         try{
             while(rs.next()){
                 pem.setIdpeminjaman(rs.getInt("idpeminjaman"));
-                pem.setIdanggota(rs.getInt("idanggota"));
-                pem.setIdbuku(rs.getInt("idbuku"));
+                pem.setAnggota(new Anggota().getById(rs.getInt("idanggota")));
+                pem.setPegawai(new Pegawai().getById(rs.getInt("idpegawai")));
+                pem.setBuku(new Buku().getById(rs.getInt("idbuku")));
                 pem.setTanggalpinjam(rs.getString("tanggalpinjam"));
                 pem.setTanggalkembali(rs.getString("tanggalkembali"));
             }
@@ -91,8 +102,9 @@ public class Peminjaman {
             while(rs.next()){
                 Peminjaman pem = new Peminjaman();
                 pem.setIdpeminjaman(rs.getInt("idpeminjaman"));
-                pem.setIdanggota(rs.getInt("idanggota"));
-                pem.setIdbuku(rs.getInt("idbuku"));
+                pem.setAnggota(new Anggota().getById(rs.getInt("idanggota")));
+                pem.setPegawai(new Pegawai().getById(rs.getInt("idpegawai")));
+                pem.setBuku(new Buku().getById(rs.getInt("idbuku")));
                 pem.setTanggalpinjam(rs.getString("tanggalpinjam"));
                 pem.setTanggalkembali(rs.getString("tanggalkembali"));
 
@@ -121,8 +133,9 @@ public class Peminjaman {
             while (rs.next()) {
                 Peminjaman pem = new Peminjaman();
                 pem.setIdpeminjaman(rs.getInt("idpeminjaman"));
-                pem.setIdanggota(rs.getInt("idanggota"));
-                pem.setIdbuku(rs.getInt("idbuku"));
+                pem.setAnggota(new Anggota().getById(rs.getInt("idanggota")));
+                pem.setPegawai(new Pegawai().getById(rs.getInt("idpegawai")));
+                pem.setBuku(new Buku().getById(rs.getInt("idbuku")));
                 pem.setTanggalpinjam(rs.getDate("tanggalpinjam").toString());
                 pem.setTanggalkembali(rs.getDate("tanggalkembali").toString());
 
@@ -136,23 +149,29 @@ public class Peminjaman {
     }
     
     public void save() {
-        if (getById(idanggota).getIdanggota()== 0) {
-            String SQL = "INSERT INTO peminjaman (idpeminjaman, idanggota, idbuku, tanggalpinjam, tanggalkembali) VALUES ('"
+        if (getById(idpeminjaman).getIdpeminjaman() == 0) {
+            String SQL = "INSERT INTO peminjaman (idpeminjaman, idanggota, idpegawai, idbuku, tanggalpinjam, tanggalkembali) VALUES ('"
             + this.idpeminjaman + "', '"
-            + this.idanggota + "', '"
-            + this.idbuku + "', '"
+            + this.anggota.getIdanggota() + "', '"
+            + this.pegawai.getIdPegawai() + "', '"
+            + this.buku.getIdBuku() + "', '"
             + this.tanggalpinjam + "', '"
             + this.tanggalkembali + "')";
-            this.idanggota = DBHelper.insertQueryGetId(SQL);
+            this.idpeminjaman = DBHelper.insertQueryGetId(SQL);
         } else {
             String SQL = "UPDATE peminjaman SET "
-                    + "idanggota = '" + this.idanggota + "', "
-                    + "idbuku = '" + this.idbuku + "', "
+                    + "idanggota = '" + this.anggota.getIdanggota() + "', "
+                    + "idbuku = '" + this.buku.getIdBuku() + "', "
                     + "tanggalpinjam = '" + this.tanggalpinjam + "', "
                     + "tanggalkembali = '" + this.tanggalkembali + "' "
                     + "WHERE idpeminjaman = '" + this.idpeminjaman + "'";
             DBHelper.executeQuery(SQL);
         }
+    }
+
+    public void saveKembali() {
+        String SQL = "UPDATE peminjaman SET tanggalkembali = '" + this.tanggalkembali + "' WHERE idpeminjaman = '" + this.idpeminjaman + "'";
+        DBHelper.executeQuery(SQL);
     }
 
     public void delete() {

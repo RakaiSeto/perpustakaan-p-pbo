@@ -13,6 +13,10 @@ public class Anggota {
         
     }
 
+    public String toString(){
+        return this.nama;
+    }
+
     public Anggota(String nama, String alamat, String telepon) {
         this.nama = nama;
         this.alamat = alamat;

@@ -10,6 +10,10 @@ public class Buku {
     private String penerbit;
     private String penulis;
 
+    public String toString(){
+        return this.judul;
+    }
+
     public int getIdBuku() {
         return idBuku;
     }
